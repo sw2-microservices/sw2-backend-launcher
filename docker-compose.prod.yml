@@ -6,7 +6,7 @@ services:
     build:
       context: ./client-gateway
       dockerfile: dockerfile.prod
-    image: client-gateway-prod
+    image: southamerica-east1-docker.pkg.dev/microservices-462305/aeoroline/client-gateway
     ports:
       - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
     environment:
@@ -17,7 +17,7 @@ services:
     build:
       context: ./auth-ms
       dockerfile: dockerfile.prod
-    image: auth-ms
+    image: southamerica-east1-docker.pkg.dev/microservices-462305/aeoroline/auth-ms
     environment:
       - PORT=3000
       - NATS_SERVERS=nats://nats-server:4222
@@ -29,35 +29,21 @@ services:
     build:
       context: ./aircraft-ms
       dockerfile: dockerfile.prod
-    image: aircraft-ms
+    image: southamerica-east1-docker.pkg.dev/microservices-462305/aeoroline/aircraft-ms
     environment:
       - PORT=3000
       - NATS_SERVERS=nats://nats-server:4222
       - DATABASE_URL=file:./dev.db
   
 
-  orders-ms:
-    build:
-      context: ./orders-ms
-      dockerfile: dockerfile.prod
-      args:
-        - ORDERS_DATABASE_URL=${ORDERS_DATABASE_URL}
-    image: orders-ms
-    environment:
-      - PORT=3000
-      - DATABASE_URL=${ORDERS_DATABASE_URL}
-      - NATS_SERVERS=nats://nats-server:4222
-
-  # # Orders DB
-  # orders-db:
-  #   container_name: orders_database
-  #   image: postgres:latest
-  #   restart: always
-  #   volumes:
-  #     - ./orders-ms/postgres:/var/lib/postgresql/data
-  #   ports:
-  #     - 5433:5432
+  # orders-ms:
+  #   build:
+  #     context: ./orders-ms
+  #     dockerfile: dockerfile.prod
+  #     args:
+  #       - ORDERS_DATABASE_URL=${ORDERS_DATABASE_URL}
+  #   image: southamerica-east1-docker.pkg.dev/microservices-462305/aeoroline/orders-ms
   #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=123456
-  #     - POSTGRES_DB=ordersdb
+  #     - PORT=3000
+  #     - DATABASE_URL=${ORDERS_DATABASE_URL}
+  #     - NATS_SERVERS=nats://nats-server:4222
